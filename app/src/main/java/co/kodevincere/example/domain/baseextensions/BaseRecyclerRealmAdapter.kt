@@ -1,5 +1,6 @@
-package co.kodevincere.k.base.ui.recyclerview
+package co.kodevincere.example.domain.baseextensions
 
+import co.kodevincere.k.base.ui.recyclerview.BaseRecyclerAdapter
 import io.realm.RealmModel
 import io.realm.RealmResults
 

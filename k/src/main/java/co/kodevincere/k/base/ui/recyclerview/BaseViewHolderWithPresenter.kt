@@ -3,13 +3,12 @@ package co.kodevincere.k.base.ui.recyclerview
 import android.view.View
 import co.kodevincere.k.base.presenter.forlists.ViewHolderPresenter
 import co.kodevincere.k.base.ui.recyclerview.actions.ListActionListener
-import io.realm.RealmModel
 
 /**
  * Created by mE on 2/12/18.
  */
 
-abstract class BaseViewHolderWithPresenter<I: RealmModel, VHVM: ViewHolderViewModel,
+abstract class BaseViewHolderWithPresenter<I, VHVM: ViewHolderViewModel,
         P: ViewHolderPresenter<I, VHVM>>(itemView: View?, actionListener: ListActionListener<I>?) :
         BaseViewHolder<I>(itemView, actionListener){
 

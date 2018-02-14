@@ -4,6 +4,7 @@ import co.kodevincere.k.base.networking.packages.Package
 import co.kodevincere.k.base.networking.packages.StringResponse
 import co.kodevincere.k.base.networking.responses.JSONResponse
 import co.kodevincere.k.base.networking.responses.JaSONResponse
+import com.github.kittinunf.fuel.core.FuelManager
 import io.reactivex.Observable
 
 /**
@@ -26,6 +27,7 @@ abstract class PostOffice{
 
     fun zetRootPath(rootPath: String){
         this.rootPath = rootPath
+        FuelManager.instance.basePath = rootPath
     }
 
     fun addPermanentHeader(key: String, value: String){
