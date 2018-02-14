@@ -8,7 +8,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'k'
 
-    publishedGroupId = 'com.inthecheesefactory.thecheeselibrary'
+    publishedGroupId = 'co.kodevincere.k'
     libraryName = 'K'
     artifact = 'k'
 
@@ -69,7 +69,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
 
-    //Realm
-    implementation "com.github.vicpinm:krealmextensions:2.1.1"
+//    //Realm
+//    implementation "com.github.vicpinm:krealmextensions:2.1.1"
 
 }
