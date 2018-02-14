@@ -14,8 +14,8 @@ ext {
 
     libraryDescription = 'K is a Kotlin MVP based multipurpose structure for Android projects.'
 
-    siteUrl = 'https://github.com/nuuneoi/FBLikeAndroid'
-    gitUrl = 'https://github.com/nuuneoi/FBLikeAndroid.git'
+    siteUrl = 'https://bitbucket.org/kodevincere/k'
+    gitUrl = 'https://juequinterore@bitbucket.org/kodevincere/k.git'
 
     libraryVersion = '0.1.0'
 
