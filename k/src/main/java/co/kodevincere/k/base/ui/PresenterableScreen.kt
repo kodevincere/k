@@ -2,6 +2,8 @@ package co.kodevincere.k.base.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.view.View
 import co.kodevincere.k.base.BaseApp
 import co.kodevincere.k.base.presenter.BaseScreenPresenter
 
@@ -30,6 +32,8 @@ interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: 
 
     }
 
+    fun getOneView(): View?
+
     fun willGoBack(up: Boolean){
         if(presenter != null) {
             presenter?.willGoBack(up)
@@ -53,5 +57,25 @@ interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: 
         }
 
         return i
+    }
+
+    fun createSnackbar(message: String): Snackbar? {
+        val view = getOneView()
+        return if(view == null) null else Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+    }
+
+    override fun showMessage(message: String) {
+        createSnackbar(message)?.show()
+    }
+
+    override fun showMessageAndNotifyOnDismiss(message: String, messageCode: Int) {
+
+        createSnackbar(message)?.addCallback(object: Snackbar.Callback(){
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                presenter?.messageDismissed(messageCode)
+            }
+        })?.show()
+
     }
 }

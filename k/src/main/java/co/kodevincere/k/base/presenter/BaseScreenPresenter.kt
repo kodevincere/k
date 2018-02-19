@@ -71,6 +71,10 @@ interface BaseScreenPresenter<V: BaseScreenViewModel>: BasePresenter<V> {
         viewModel?.showActivityForResult(clazz, bundle, requestCode)
     }
 
+    fun messageDismissed(messageCode: Int) {
+
+    }
+
     //Networking
     fun rxSendPackageWaitJSON(packageToSend: Package): Observable<JSONResponse> =
             BaseApp.sInstance.postOffice.rxSendPackageWaitJSON(packageToSend)

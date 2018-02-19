@@ -1,8 +1,8 @@
 package co.kodevincere.example.ui.main
 
 
+import android.util.Log
 import co.kodevincere.example.domain.baseextensions.JaSONRequestRealmPresenter
-import co.kodevincere.example.domain.baseextensions.writeTransaction
 import co.kodevincere.example.domain.models.User
 import co.kodevincere.example.domain.networking.packages.HttpGetPackages
 import co.kodevincere.example.ui.detail.ActivityDetail
@@ -21,6 +21,11 @@ class PresenterMain: JaSONRequestRealmPresenter<User, ViewModelMain>() {
 
 //class PresenterMain: JaSONRequestListPresenter<User, ViewModelMain>() {
 
+    private val CODE_ITEM_CLICKED = 121
+    private val KEY_RESULTS = "results"
+
+    private val TAG = "PresenterMain"
+
     override var viewModel: ViewModelMain? = null
 
     override fun getObjectClass(): Class<User> = User::class.java
@@ -34,7 +39,7 @@ class PresenterMain: JaSONRequestRealmPresenter<User, ViewModelMain>() {
 
         val jason = response.body!!
 
-        val results = jason.getListJaSON("results")
+        val results = jason.getListJaSON(KEY_RESULTS)
 
         val usersList = mutableListOf<User>()
 
@@ -44,6 +49,13 @@ class PresenterMain: JaSONRequestRealmPresenter<User, ViewModelMain>() {
         }
 
         return Observable.fromIterable(usersList)
+    }
+
+    override fun messageDismissed(messageCode: Int) {
+        super.messageDismissed(messageCode)
+        if(messageCode == CODE_ITEM_CLICKED){
+            Log.d(TAG, "Snackbar dismissed")
+        }
     }
 
     override fun onResume() {
@@ -62,10 +74,8 @@ class PresenterMain: JaSONRequestRealmPresenter<User, ViewModelMain>() {
         when(goodOldActionPack.actionId){
             KEY_ACTION_ID_PROFILE_PICTURE -> showUserActivity(goodOldActionPack.item)
             KEY_ACTION_ID_ROOT -> {
-                writeTransaction {
-                    goodOldActionPack.item?.name = "Marica"
-                }
-                updateItemAtPosition(goodOldActionPack.position)
+                viewModel?.showMessageAndNotifyOnDismiss(goodOldActionPack.item?.name ?: "",
+                        CODE_ITEM_CLICKED)
             }
         }
     }

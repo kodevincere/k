@@ -7,7 +7,9 @@ import android.support.v4.app.NavUtils
 import android.support.v4.app.TaskStackBuilder
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import co.kodevincere.k.base.presenter.BaseScreenPresenter
+import org.jetbrains.anko.contentView
 
 
 /**
@@ -19,6 +21,10 @@ abstract class BaseActivity<P: BaseScreenPresenter<out BaseScreenViewModel>>: Ap
     override var presenter = startPresenter()
 
     override fun viewContext(): Context = this
+
+    override fun getOneView(): View? {
+        return contentView
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +75,12 @@ abstract class BaseActivity<P: BaseScreenPresenter<out BaseScreenViewModel>>: Ap
 
     override fun goUp(){
         val upIntent = NavUtils.getParentActivityIntent(this)
+
+        if(upIntent == null){
+            goBack()
+            return
+        }
+
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             // This activity is NOT part of this app's task, so create a new task
             // when navigating up, with a synthesized back stack.
@@ -114,5 +126,6 @@ abstract class BaseActivity<P: BaseScreenPresenter<out BaseScreenViewModel>>: Ap
     override fun onBackPressed() {
         willGoBack(false)
     }
+
 
 }

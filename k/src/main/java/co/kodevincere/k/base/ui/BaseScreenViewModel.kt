@@ -11,6 +11,8 @@ interface BaseScreenViewModel: BaseViewModel {
     fun goUp()
     fun goBack()
     fun finish()
+    fun showMessage(message: String)
+    fun showMessageAndNotifyOnDismiss(message: String, messageCode: Int)
     fun showActivity(clazz: Class<*>, bundle: Bundle? = null)
     fun showActivityForResult(clazz: Class<*>, bundle: Bundle? = null, requestCode: Int)
     fun returnResult(resultCode: Int, intent: Intent?)

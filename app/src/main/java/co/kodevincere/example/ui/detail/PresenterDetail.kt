@@ -2,12 +2,12 @@ package co.kodevincere.example.ui.detail
 
 import android.app.Activity
 import android.os.Bundle
-import co.kodevincere.k.base.presenter.BaseScreenPresenter
 import co.kodevincere.example.domain.baseextensions.realm
 import co.kodevincere.example.domain.baseextensions.writeTransaction
 import co.kodevincere.example.domain.models.User
 import co.kodevincere.example.ui.detail.changename.FragmentChangeName
 import co.kodevincere.example.ui.main.MainActivity
+import co.kodevincere.k.base.presenter.BaseScreenPresenter
 
 /**
  * Created by mE on 2/8/18.
@@ -39,6 +39,14 @@ class PresenterDetail: BaseScreenPresenter<ViewModelDetail> {
         viewModel?.showPicture(pictureUrl)
     }
 
+    override fun messageDismissed(messageCode: Int) {
+        super.messageDismissed(messageCode)
+        if(messageCode == 939){
+            val intent = MainActivity.createDetailResultIntent("Puta madre")
+            viewModel?.returnResultAndFinish(Activity.RESULT_OK, intent)
+        }
+    }
+
     private fun processShowBundle(bundle: Bundle) {
         id = bundle.getString(FragmentDetail.KEY_ID)
         name = bundle.getString(FragmentDetail.KEY_NAME)
@@ -59,8 +67,7 @@ class PresenterDetail: BaseScreenPresenter<ViewModelDetail> {
     }
 
     fun testingClicked(text: String?) {
-        val intent = MainActivity.createDetailResultIntent(text)
-        viewModel?.returnResultAndFinish(Activity.RESULT_OK, intent)
+        viewModel?.showMessageAndNotifyOnDismiss(text ?: "Nothing", 939)
     }
 
     fun changeClicked() {

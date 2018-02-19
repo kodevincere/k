@@ -31,13 +31,17 @@ abstract class BaseFragment<P: BaseScreenPresenter<out BaseScreenViewModel>>: Fr
         return context ?: BaseApp.sInstance
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        return inflater?.inflate(getViewLayout(), container, false)
+    override fun getOneView(): View? {
+        return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+
+        return inflater.inflate(getViewLayout(), container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeAll(myExtras())
     }
