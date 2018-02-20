@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by mE on 2/6/18.
  */
-abstract class RequestElementsPresenter<I, L: List<I> , R: DeliveryResponse<*>, VM: ElementsScreenViewModel<L>>: ElementsPresenter<I, L, VM> {
+abstract class RequestElementsPresenter<I, L: List<I> , R: DeliveryResponse<*>, VM: ElementsScreenViewModel<L>>: ElementsPresenter<I, L, VM>() {
 
     override var itemList: L = initItemList()
 

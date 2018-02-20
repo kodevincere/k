@@ -8,19 +8,19 @@ import co.kodevincere.k.base.ui.recyclerview.actions.ListActionListener
 /**
  * Created by mE on 2/6/18.
  */
-interface ElementsPresenter<I, L: List<I>, VM: ElementsScreenViewModel<L>>: BaseScreenPresenter<VM>,
+abstract class ElementsPresenter<I, L: List<I>, VM: ElementsScreenViewModel<L>>: BaseScreenPresenter<VM>(),
         ListActionListener<I> {
 
-    var itemList: L
+    abstract var itemList: L
 
-    fun initItemList(): L
-    fun clearAllItemList()
-    fun appendToItemList(newItems: L?)
-    fun removeItemAtPosition(position: Int)
+    abstract fun initItemList(): L
+    abstract fun clearAllItemList()
+    abstract fun appendToItemList(newItems: L?)
+    abstract fun removeItemAtPosition(position: Int)
 
     //BaseScreenPresenter
     override fun onCreate() {
-        super.onCreate()
+//        super.onCreate()
         itemList = initItemList()
     }
 
@@ -35,36 +35,36 @@ interface ElementsPresenter<I, L: List<I>, VM: ElementsScreenViewModel<L>>: Base
 
     }
 
-    fun refresh(){
+    open fun refresh(){
     }
 
-    fun canRequestNext(): Boolean = false
+    open fun canRequestNext(): Boolean = false
 
-    fun requestNext(): Boolean = false
+    open fun requestNext(): Boolean = false
 
-    fun clearAll(){
+    open fun clearAll(){
         clearAllItemList()
         viewModel?.clearAll()
     }
 
-    fun setItems(){
+    open fun setItems(){
         viewModel?.setItems(itemList)
     }
 
-    fun getItemPosition(item: I): Int{
+    open fun getItemPosition(item: I): Int{
         return itemList.indexOf(item)
     }
 
-    fun appendToItemsAndRefreshInterface(newItems: L? = null, count: Int = 0){
+    open fun appendToItemsAndRefreshInterface(newItems: L? = null, count: Int = 0){
         appendToItemList(newItems)
         viewModel?.appendedItems(newItems?.count() ?: count)
     }
 
-    fun updateItemAtPosition(position: Int){
+    open fun updateItemAtPosition(position: Int){
         viewModel?.updateItemAt(position)
     }
 
-    fun removeFromItemsAndRefreshInterface(itemPosition: Int){
+    open fun removeFromItemsAndRefreshInterface(itemPosition: Int){
         viewModel?.removeItemAtPosition(itemPosition)
         removeItemAtPosition(itemPosition)
     }

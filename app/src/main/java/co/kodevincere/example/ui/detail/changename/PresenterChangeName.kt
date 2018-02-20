@@ -1,15 +1,15 @@
 package co.kodevincere.example.ui.detail.changename
 
 import android.os.Bundle
-import co.kodevincere.k.base.presenter.BaseScreenPresenter
 import co.kodevincere.example.domain.baseextensions.realm
 import co.kodevincere.example.domain.models.User
 import co.kodevincere.example.ui.detail.FragmentDetail
+import co.kodevincere.k.base.presenter.BaseScreenPresenter
 
 /**
  * Created by mE on 2/13/18.
  */
-class PresenterChangeName: BaseScreenPresenter<ViewModelChangeName> {
+class PresenterChangeName: BaseScreenPresenter<ViewModelChangeName>() {
 
     override var viewModel: ViewModelChangeName? = null
 

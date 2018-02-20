@@ -1,5 +1,6 @@
 package co.kodevincere.k.base.ui
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import co.kodevincere.k.base.BaseApp
 import co.kodevincere.k.base.presenter.BaseScreenPresenter
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by mE on 2/13/18.
@@ -17,6 +19,7 @@ abstract class BaseFragment<P: BaseScreenPresenter<out BaseScreenViewModel>>: Fr
         , PresenterableScreen<P> {
 
     override var presenter: P? = startPresenter()
+    override var viewDisposables: MutableList<Disposable>? = mutableListOf()
 
     protected var parentScreen: ParentScreen? = null
 
@@ -35,6 +38,14 @@ abstract class BaseFragment<P: BaseScreenPresenter<out BaseScreenViewModel>>: Fr
         return view
     }
 
+    override fun getLifeCycleObject(): Lifecycle {
+        return lifecycle
+    }
+
+    final override fun startPresenter(): P? {
+        return super.startPresenter()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -49,27 +60,12 @@ abstract class BaseFragment<P: BaseScreenPresenter<out BaseScreenViewModel>>: Fr
     override fun onResume() {
         super.onResume()
         bindToPresenter()
-        presenter?.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter?.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter?.onPause()
+        initViewDisposables()
     }
 
     override fun onStop() {
         super.onStop()
-        presenter?.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter?.canReduceMemoryUsage(hashCode())
+        clearViewDisposables()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

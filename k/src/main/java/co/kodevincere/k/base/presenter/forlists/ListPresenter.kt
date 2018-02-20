@@ -5,7 +5,7 @@ import co.kodevincere.k.base.ui.recyclerview.ElementsScreenViewModel
 /**
  * Created by mE on 2/6/18.
  */
-abstract class ListPresenter<I, VM: ElementsScreenViewModel<MutableList<I>>>: ElementsPresenter<I, MutableList<I>, VM> {
+abstract class ListPresenter<I, VM: ElementsScreenViewModel<MutableList<I>>>: ElementsPresenter<I, MutableList<I>, VM>() {
 
     //ElementsPresenter
     override fun initItemList(): MutableList<I> = mutableListOf()

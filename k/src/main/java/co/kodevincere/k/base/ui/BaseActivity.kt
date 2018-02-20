@@ -1,5 +1,6 @@
 package co.kodevincere.k.base.ui
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import co.kodevincere.k.base.presenter.BaseScreenPresenter
+import io.reactivex.disposables.Disposable
 import org.jetbrains.anko.contentView
 
 
@@ -19,11 +21,20 @@ abstract class BaseActivity<P: BaseScreenPresenter<out BaseScreenViewModel>>: Ap
         PresenterableScreen<P>{
 
     override var presenter = startPresenter()
+    override var viewDisposables: MutableList<Disposable>? = mutableListOf()
 
     override fun viewContext(): Context = this
 
     override fun getOneView(): View? {
         return contentView
+    }
+
+    override fun getLifeCycleObject(): Lifecycle {
+        return lifecycle
+    }
+
+    final override fun startPresenter(): P? {
+        return super.startPresenter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,27 +46,12 @@ abstract class BaseActivity<P: BaseScreenPresenter<out BaseScreenViewModel>>: Ap
     override fun onResume() {
         super.onResume()
         bindToPresenter()
-        presenter?.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter?.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter?.onPause()
+        initViewDisposables()
     }
 
     override fun onStop() {
         super.onStop()
-        presenter?.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter?.canReduceMemoryUsage(hashCode())
+        clearViewDisposables()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,25 +1,27 @@
 package co.kodevincere.k.base.ui
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.View
 import co.kodevincere.k.base.BaseApp
 import co.kodevincere.k.base.presenter.BaseScreenPresenter
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by mE on 2/12/18.
  */
-interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: BaseScreenViewModel {
+interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: BaseScreenViewModel{
 
     var presenter: P?
+    var viewDisposables: MutableList<Disposable>?
 
     fun initializeAll(extras: Bundle?){
         initViews()
         extras?.let {
             presenter?.processBundle(it)
         }
-        presenter?.onCreate()
     }
 
     fun getViewLayout(): Int
@@ -28,8 +30,25 @@ interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: 
 
     fun getPresenterKey(): String
 
-    fun initViews(){
+    fun getLifeCycleObject(): Lifecycle
 
+    fun initViews(){
+        initViewDisposables()
+    }
+
+    fun initViewDisposables(){
+
+    }
+
+    fun addToViewDisposables(disposable: Disposable?){
+        disposable?.let {
+            viewDisposables?.add(it)
+        }
+    }
+
+    fun clearViewDisposables(){
+        viewDisposables?.map { it.dispose() }
+        viewDisposables?.clear()
     }
 
     fun getOneView(): View?
@@ -47,7 +66,11 @@ interface PresenterableScreen<P: BaseScreenPresenter<out BaseScreenViewModel>>: 
     }
 
     fun startPresenter(): P? {
-        return BaseApp.sInstance.presenterPool.getPresenter(getPresenterKey())
+        val presenter: P? = BaseApp.sInstance.presenterPool.getPresenter(getPresenterKey())
+        if(presenter != null) {
+            getLifeCycleObject().addObserver(presenter)
+        }
+        return presenter
     }
 
     fun createIntentForActivityStart(clazz: Class<*>, bundle: Bundle?): Intent {

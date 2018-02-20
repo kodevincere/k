@@ -4,8 +4,10 @@ import android.os.Bundle
 import co.kodevincere.example.R
 import co.kodevincere.example.domain.medias.images.show
 import co.kodevincere.k.base.ui.BaseFragment
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_detail.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk25.coroutines.textChangedListener
 
 
 /**
@@ -13,6 +15,7 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
  */
 
 class FragmentDetail: BaseFragment<PresenterDetail>(), ViewModelDetail {
+    override var testButtonEnabled: PublishSubject<Boolean>? = PublishSubject.create()
 
     companion object {
         const val KEY_ID = "id"
@@ -68,6 +71,18 @@ class FragmentDetail: BaseFragment<PresenterDetail>(), ViewModelDetail {
     override fun initViews() {
         super.initViews()
         setClickListeners()
+        setTextChangeListeners()
+    }
+
+    override fun initViewDisposables() {
+        super.initViewDisposables()
+
+        val buttonEnabledDisposable = testButtonEnabled?.subscribe {
+            enabled->
+            btnTesting?.isEnabled = enabled
+        }
+
+        addToViewDisposables(buttonEnabledDisposable)
     }
 
     override fun showName(name: String?) {
@@ -82,6 +97,14 @@ class FragmentDetail: BaseFragment<PresenterDetail>(), ViewModelDetail {
         ivPicture.show(pictureUrl)
     }
 
+    override fun enableButton() {
+        btnTesting.isEnabled = true
+    }
+
+    override fun disableButton() {
+        btnTesting.isEnabled = false
+    }
+
     private fun setClickListeners() {
         btnTesting.onClick {
             presenter?.testingClicked(tvTesting?.text.toString())
@@ -89,6 +112,15 @@ class FragmentDetail: BaseFragment<PresenterDetail>(), ViewModelDetail {
 
         btnChange.onClick {
             presenter?.changeClicked()
+        }
+    }
+
+    private fun setTextChangeListeners() {
+        tvTesting.textChangedListener {
+            afterTextChanged {
+                val text = it.toString()
+                presenter?.textFieldDisposable?.onNext(text)
+            }
         }
     }
 

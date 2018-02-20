@@ -11,7 +11,7 @@ import io.realm.kotlin.deleteFromRealm
 /**
  * Created by mE on 2/9/18.
  */
-abstract class RealmPresenter<I: RealmModel, VM: ElementsScreenViewModel<RealmResults<I>>>: ElementsPresenter<I, RealmResults<I>, VM> {
+abstract class RealmPresenter<I: RealmModel, VM: ElementsScreenViewModel<RealmResults<I>>>: ElementsPresenter<I, RealmResults<I>, VM>() {
 
     abstract fun getObjectClass(): Class<I>
 
